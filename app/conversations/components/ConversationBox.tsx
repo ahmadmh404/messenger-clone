@@ -1,84 +1,104 @@
-'use client'	
+"use client";
 
-import { useCallback,useMemo } from "react"
-import { useRouter } from "next/navigation"
-import { Conversation,Message,User } from "@prisma/client"
-import {format} from 'date-fns'
-import {useSession} from 'next-auth/react'
-import clsx from 'clsx'
-import { FullConversationType } from "@/app/types"
-import useOtherUser from "@/app/hooks/useOtherUser"
-import Avatar from "@/app/components/Avatar"
-import AvatarGroup from "@/app/components/AvatarGroup"
-
+import { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { format } from "date-fns";
+import { useSession } from "next-auth/react";
+import clsx from "clsx";
+import { FullConversationType } from "@/app/types";
+import useOtherUser from "@/app/hooks/useOtherUser";
+import Avatar from "@/app/components/Avatar";
+import AvatarGroup from "@/app/components/AvatarGroup";
+import PlaceholderAvatar from "@/public/images/placeholder.jpg";
 
 interface ConversationBoxProps {
-data:FullConversationType
-selected?:boolean
+  data: FullConversationType;
+  selected?: boolean;
 }
 
-export default function ConversationBox ({data,selected}:ConversationBoxProps) {
+export default function ConversationBox({
+  data,
+  selected,
+}: ConversationBoxProps) {
+  const otherUser = useOtherUser(data);
+  const session = useSession();
+  const router = useRouter();
 
-    const otherUser = useOtherUser(data)
-    const session = useSession()
-    const router = useRouter()
+  const handleClick = useCallback(() => {
+    router.push(`/conversations/${data.id}`);
+  }, [data.id, router]);
 
-    const handleClick = useCallback(() => {
-        router.push(`/conversations/${data.id}`)
-    },[data.id,router])
+  const lastMessage = useMemo(() => {
+    const messages = data.messages || [];
 
-    const lastMessage = useMemo(() => {
-        const messages = data.messages || []
+    return messages[messages.length - 1];
+  }, [data.messages]);
 
-        return messages[messages.length -1]
-    },[data.messages])
+  const userEmail = useMemo(() => {
+    return session.data?.user?.email;
+  }, [session.data?.user?.email]);
 
-
-    const userEmail = useMemo(() => {
-        return session.data?.user?.email 
-    },[session.data?.user?.email])
-
-    const hasSeen = useMemo(() => {
-        if (!lastMessage) {
-            return false
-        }
-
-    const seenArray = lastMessage.seen || []
-
-    if (!userEmail) {
-        return false
+  const hasSeen = useMemo(() => {
+    if (!lastMessage) {
+      return false;
     }
 
-    return seenArray.filter(user => user.email === userEmail).length !== 0
-    
-    },[userEmail,lastMessage])
+    const seenArray = lastMessage.seen || [];
 
-    const lastMessageText = useMemo(() => {
-        if (lastMessage?.image) {
-            return 'Sent an iamge'
-        }
-        if (lastMessage?.body) {
-            return lastMessage.body
-        } 
+    if (!userEmail) {
+      return false;
+    }
 
-        return 'Start a conversation'
-    },[lastMessage])
+    return seenArray.filter((user) => user.email === userEmail).length !== 0;
+  }, [userEmail, lastMessage]);
 
-return (
-    <div className={clsx(`w-full relative flex items-center space-x-3 hover:bg-[#404040] rounded-lg
-    transition cursor-pointer p-3 text-neutral-100`,selected ? 'bg-[#404040]' : 'bg-[#303030]')}
-     onClick={handleClick}>
-        {data.isGroup ? <AvatarGroup users={data.users}/> : <Avatar user={otherUser}/>}
-        <div className="min-w-0 flex-1">
-            <div className="focus:outline-none">
-                <div className="flex justify-between items-center mb-1">
-                    <p className="text-md font-medium text-neutral-100">{data.name || otherUser.name}</p>
-                    {lastMessage?.createdAt && (<p className="text-xs text-gray-400 font-light">{format(new Date(lastMessage.createdAt),'p')}</p>)}
-                </div>
-                <p className={clsx(`truncate text-sm`,hasSeen ? 'text-gray-500' : 'text-neutral-400 font-medium')}>{lastMessageText}</p>
-            </div>
+  const lastMessageText = useMemo(() => {
+    if (lastMessage?.image) {
+      return "Sent an iamge";
+    }
+    if (lastMessage?.body) {
+      return lastMessage.body;
+    }
 
+    return "Start a conversation";
+  }, [lastMessage]);
+
+  return (
+    <div
+      className={clsx(
+        `w-full relative flex items-center space-x-3 hover:bg-[#404040] rounded-lg
+    transition cursor-pointer p-3 text-neutral-100`,
+        selected ? "bg-[#404040]" : "bg-[#303030]",
+      )}
+      onClick={handleClick}
+    >
+      {data.isGroup ? (
+        <AvatarGroup users={data.users} />
+      ) : (
+        <Avatar user={otherUser || PlaceholderAvatar.src} />
+      )}
+      <div className="min-w-0 flex-1">
+        <div className="focus:outline-none">
+          <div className="flex justify-between items-center mb-1">
+            <p className="text-md font-medium text-neutral-100">
+              {data.name || otherUser.name}
+            </p>
+            {lastMessage?.createdAt && (
+              <p className="text-xs text-gray-400 font-light">
+                {format(new Date(lastMessage.createdAt), "p")}
+              </p>
+            )}
+          </div>
+          <p
+            className={clsx(
+              `truncate text-sm`,
+              hasSeen ? "text-gray-500" : "text-neutral-400 font-medium",
+            )}
+          >
+            {lastMessageText}
+          </p>
         </div>
-     </div>
-)
+      </div>
+    </div>
+  );
 }
