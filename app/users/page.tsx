@@ -1,6 +1,4 @@
-"use client";
-
-import EmptyState from "../components/EmptyState";
+import { EmptyState } from "../components/EmptyState";
 
 export default function Page() {
   return (
