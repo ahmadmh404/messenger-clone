@@ -69,7 +69,7 @@ app/
 │   ├── AvatarGroup.tsx       # Group chat avatars
 │   ├── Button.tsx            # Reusable button
 │   ├── EmptyState.tsx        # Empty state placeholder
-│   ├── LoadingModal.tsx      # Loading overlay
+│   ├── SlimLoader.tsx      # Loading overlay
 │   └── Modal.tsx             # Reusable modal
 │
 ├── context/                   # React context providers

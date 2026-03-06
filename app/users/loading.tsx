@@ -1,7 +1,5 @@
-import LoadingModal from "../components/LoadingModal";
+import { SlimLoader } from "../components/slim-loader";
 
-export default function Loading () {
-return (
-    <LoadingModal/>
-  )
+export default function Loading() {
+  return <SlimLoader />;
 }

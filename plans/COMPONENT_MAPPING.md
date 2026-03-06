@@ -13,7 +13,7 @@ This document maps the current custom components to their shadcn/ui equivalents.
 | Avatar            | `app/components/Avatar.tsx`        | `@/components/ui/avatar`          | Use Avatar, AvatarImage, AvatarFallback |
 | AvatarGroup       | `app/components/AvatarGroup.tsx`   | `@/components/ui/avatar` + custom | Custom implementation with Avatar       |
 | EmptyState        | `app/components/EmptyState.tsx`    | Custom + Card                     | Use Card component                      |
-| LoadingModal      | `app/components/LoadingModal.tsx`  | Custom + Dialog                   | Use Dialog with loading state           |
+| SlimLoader        | `app/components/SlimLoader.tsx`    | Custom + Dialog                   | Use Dialog with loading state           |
 
 ## Sidebar Components
 
