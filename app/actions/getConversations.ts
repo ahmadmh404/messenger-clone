@@ -1,7 +1,7 @@
 import prisma from "@/app/libs/prismadb";
 
 import getCurrentUser from "./getCurrentUser";
-import useConversation from "../hooks/useConversation";
+import { cacheTag } from "next/cache";
 
 const getConversations = async () => {
   const currentUser = await getCurrentUser();
@@ -9,6 +9,9 @@ const getConversations = async () => {
   if (!currentUser?.id) {
     return [];
   }
+
+  ("use cache");
+  cacheTag(`conversations-${currentUser.id}`);
 
   try {
     const conversations = await prisma.conversation.findMany({

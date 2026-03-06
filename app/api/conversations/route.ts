@@ -2,6 +2,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -36,14 +37,17 @@ export async function POST(req: Request) {
         include: {
           users: true,
         },
-      })
+      });
 
-
-       newConversation.users.forEach((user) => {
+      newConversation.users.forEach((user) => {
         if (user.email) {
-          pusherServer.trigger(user.email,'conversation:new',newConversation)
+          pusherServer.trigger(user.email, "conversation:new", newConversation);
         }
-      })
+      });
+
+      // Revalidate cache after creating a group conversation
+      revalidateTag(`conversations-${currentUser.id}`, "max");
+
       return NextResponse.json(newConversation);
     }
 
@@ -69,24 +73,30 @@ export async function POST(req: Request) {
       return NextResponse.json(singleConversation);
     }
 
-      const newConversation = await prisma.conversation.create({
-        data: {
-          users: {
-            connect: [{ id: currentUser.id }, { id: userId }],
-          },
+    const newConversation = await prisma.conversation.create({
+      data: {
+        users: {
+          connect: [{ id: currentUser.id }, { id: userId }],
         },
-        include: { users: true },
-      })
+      },
+      include: { users: true },
+    });
 
-      newConversation.users.map(user => {
-        if (user.email) {
-          pusherServer.trigger(user.email,'conversation:new',newConversation)
-        }
-      })
-       
-      return NextResponse.json(newConversation);
+    newConversation.users.map((user) => {
+      if (user.email) {
+        pusherServer.trigger(user.email, "conversation:new", newConversation);
+      }
+    });
 
-    } catch (error) {
+    // Revalidate cache after creating a conversation
+    try {
+      revalidateTag(`conversations-${currentUser.id}`, "max");
+    } catch (e) {
+      console.log("Cache revalidation not available");
+    }
+
+    return NextResponse.json(newConversation);
+  } catch (error) {
     return new NextResponse("Internal error", { status: 500 });
   }
 }

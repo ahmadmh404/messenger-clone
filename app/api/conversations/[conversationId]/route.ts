@@ -1,55 +1,63 @@
-import getCurrentUser from "@/app/actions/getCurrentUser"
-import { NextResponse } from "next/server"
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import { NextResponse } from "next/server";
 
-import prisma from '@/app/libs/prismadb'
-import { pusherServer } from "@/app/libs/pusher"
+import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
+import { revalidateTag } from "next/cache";
 
 interface IParams {
-  conversationId?:string
+  conversationId?: string;
 }
 
-export async function DELETE(req:Request,{params}:{params:IParams}) {
-  console.log(11,'/api/conversations/[conversationId]')
+export async function DELETE(req: Request, { params }: { params: IParams }) {
+  console.log(11, "/api/conversations/[conversationId]");
   try {
-    const {conversationId} = params
-    const currentUser = await getCurrentUser()
+    const { conversationId } = params;
+    const currentUser = await getCurrentUser();
 
     if (!currentUser?.id) {
-      return new NextResponse("Unauthorized",{status:401})
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const existingConversation = await prisma.conversation.findUnique({
-      where:{
-        id:conversationId
+      where: {
+        id: conversationId,
       },
-      include:{
-        users:true
-      }
-    })
+      include: {
+        users: true,
+      },
+    });
 
     if (!existingConversation) {
-      return new NextResponse("Invalid ID",{status:400})
+      return new NextResponse("Invalid ID", { status: 400 });
     }
 
     const deletedConversation = await prisma.conversation.deleteMany({
-      where:{
-        id:conversationId,
-        userIds:{
-          hasSome:[currentUser.id]
-        }
-      }
-    })
+      where: {
+        id: conversationId,
+        userIds: {
+          hasSome: [currentUser.id],
+        },
+      },
+    });
 
-    existingConversation.users.forEach(user => {
+    existingConversation.users.forEach((user) => {
       if (user.email) {
-        pusherServer.trigger(user.email,'conversation:remove',existingConversation)
+        pusherServer.trigger(
+          user.email,
+          "conversation:remove",
+          existingConversation,
+        );
       }
-    })
+    });
 
-    return NextResponse.json(deletedConversation)
+    // Revalidate cache after deleting a conversation
+    revalidateTag(`conversations-${currentUser.id}`, "max");
+    revalidateTag(`conversation-${conversationId}`, "max");
 
+    return NextResponse.json(deletedConversation);
   } catch (error) {
-    console.log(error,'ERROR_CONVERSATION_DELETE')
-    return new NextResponse('Internal Error',{status:500})
+    console.log(error, "ERROR_CONVERSATION_DELETE");
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

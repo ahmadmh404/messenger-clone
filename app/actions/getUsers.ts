@@ -1,5 +1,6 @@
 import prisma from "@/app/libs/prismadb";
 import getSession from "./getSession";
+import { cacheTag } from "next/cache";
 
 const getUsers = async () => {
   const session = await getSession();
@@ -7,6 +8,10 @@ const getUsers = async () => {
   if (!session?.user?.email) {
     return [];
   }
+
+  ("use cache");
+  cacheTag("users");
+  cacheTag(`user-list-${session.user.email}`);
 
   try {
     const users = await prisma.user.findMany({

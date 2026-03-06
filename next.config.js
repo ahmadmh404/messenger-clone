@@ -1,14 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    swcPlugins: [["next-superjson-plugin", {}]],
-  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
+  },
+  // Enable experimental features for better performance
+  experimental: {
+    // Enable the new Next.js 15+ caching behavior
   },
 };
 
