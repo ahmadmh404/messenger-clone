@@ -11,11 +11,11 @@ export default async function ConversationLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
-  if (currentUser == null) return null;
+  if (currentUser == null || currentUser.email == null) return null;
 
   const conversations = await getConversations(currentUser.id);
 
-  const users = await getUsers();
+  const users = await getUsers(currentUser.email);
 
   return (
     <SidebarLayout>

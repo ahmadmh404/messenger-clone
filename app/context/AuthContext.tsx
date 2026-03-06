@@ -7,5 +7,5 @@ export interface AuthContextProps {
 }
 
 export default function AuthContext({ children }: AuthContextProps) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return <SessionProvider refetchOnWindowFocus>{children}</SessionProvider>;
 }

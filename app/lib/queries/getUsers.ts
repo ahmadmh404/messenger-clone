@@ -4,14 +4,9 @@ import prisma from "@/app/libs/prismadb";
 import { getSession } from "@/app/lib/auth";
 import { cacheTag } from "next/cache";
 
-export async function getUsers() {
+export async function getUsers(userEmail: string) {
   "use cache";
   cacheTag("users");
-
-  const session = await getSession();
-  if (!session?.user?.email) {
-    return [];
-  }
 
   const users = await prisma.user.findMany({
     orderBy: {
@@ -19,7 +14,7 @@ export async function getUsers() {
     },
     where: {
       NOT: {
-        email: session.user.email,
+        email: userEmail,
       },
     },
   });
