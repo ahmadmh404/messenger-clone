@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/app/components/Button";
-import Input from "@/app/components/Inputs/Input";
-import Select from "@/app/components/Inputs/Select";
+import { Input } from "@/app/components/Inputs/Input";
+import { Select } from "@/app/components/Inputs/Select";
 import { Modal } from "@/app/components/Modal";
 import { User } from "@prisma/client";
 import axios from "axios";

@@ -5,7 +5,7 @@ import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 
 import Button from "@/app/components/Button";
-import Input from "@/app/components/Inputs/Input";
+import { Input } from "@/app/components/Inputs/Input";
 import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
@@ -51,7 +51,7 @@ export function AuthForm() {
 
     if (variant === "REGISTER") {
       axios
-        .post('/api/register', data)
+        .post("/api/register", data)
         .then(() => signIn("credentials", data))
         .catch(() => toast.error("Something went wrong"))
         .finally(() => setIsLoading(false));
