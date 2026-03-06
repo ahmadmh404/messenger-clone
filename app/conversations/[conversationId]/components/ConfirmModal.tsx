@@ -1,69 +1,82 @@
 "use client";
-import Button from "@/app/components/Button";
-import { Modal } from "@/app/components/Modal";
-import useConversation from "@/app/hooks/useConversation";
-import { Dialog } from "@headlessui/react";
-import axios from "axios";
+
+import React from "react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import axios from "axios";
 import toast from "react-hot-toast";
 import { FiAlertTriangle } from "react-icons/fi";
+import useConversation from "@/app/hooks/useConversation";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
 
 interface ConfirmModalProps {
   isOpen?: boolean;
   onClose: () => void;
 }
 
-function ConfirmModal({ isOpen, onClose }: ConfirmModalProps) {
+export function ConfirmModal({ isOpen, onClose }: ConfirmModalProps) {
   const router = useRouter();
   const { conversationId } = useConversation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const onDelete = useCallback(() => {
+  const onDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsLoading(true);
 
-    axios
-      .delete(`/api/conversations/${conversationId}`)
-      .then(() => {
-        onClose();
-        router.push("/conversations");
-        router.refresh();
-      })
-      .catch(() => toast.error("Something went wrong"))
-      .finally(() => setIsLoading(false));
-  }, [conversationId, onClose, router]);
+    try {
+      await axios.delete(`/api/conversations/${conversationId}`);
+      router.push("/conversations");
+      router.refresh();
+      onClose();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="sm:flex sm:items-start">
-        <div className="mx-auto flex w-12 h-12 flex-shrink-0 justify-center items-center rounded-full bg-red-600 sm:mx-0 sm:w-10 sm:h-10">
-          <FiAlertTriangle className="w-6 h-6" />
-        </div>
-        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-          <Dialog.Title
-            className="text-base font-semibold leading-6 text-neutral-100"
-            as="h3"
-          >
-            Delete conversation
-          </Dialog.Title>
-          <div className="mt-2 text-neutral-300">
-            <p>
-              Are you sure you want to delete this conversation? This action
-              cannot be undone.
-            </p>
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent className="bg-[#303030] border-none text-neutral-100">
+        <AlertDialogHeader>
+          <div className="flex items-center gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-600/20 text-red-600">
+              <FiAlertTriangle className="h-6 w-6" />
+            </div>
+            <AlertDialogTitle>Delete conversation</AlertDialogTitle>
           </div>
-        </div>
-      </div>
-      <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-        <Button disabled={isLoading} danger onClick={onDelete}>
-          Delete
-        </Button>
-        <Button disabled={isLoading} secondary onClick={onClose}>
-          Cancel
-        </Button>
-      </div>
-    </Modal>
+          <AlertDialogDescription className="text-neutral-400 pt-2 text-left">
+            Are you sure you want to delete this conversation? This action
+            cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="mt-4">
+          <AlertDialogCancel
+            disabled={isLoading}
+            className="bg-neutral-700 text-white border-none hover:bg-neutral-600"
+          >
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={onDelete}
+            disabled={isLoading}
+            className={buttonVariants({ variant: "destructive" })}
+          >
+            {isLoading ? "Deleting..." : "Delete"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
-
-export default ConfirmModal;
