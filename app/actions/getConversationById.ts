@@ -1,27 +1,31 @@
+"use server";
+
 import prisma from "@/app/libs/prismadb";
-import getCurrentUser from "./getCurrentUser";
+import { cacheTag } from "next/cache";
 
-const getConversationById = async (conversationId: string) => {
-  try {
-    const currentUser = await getCurrentUser();
+export async function getConversationById(conversationId: string) {
+  "use cache";
 
-    if (!currentUser?.email) {
-      return null;
-    }
+  cacheTag(`conversation-${conversationId}`);
+  cacheTag(`messages-${conversationId}`);
 
-    const conversation = await prisma.conversation.findUnique({
-      where: {
-        id: conversationId,
+  const conversation = await prisma.conversation.findUnique({
+    where: {
+      id: conversationId,
+    },
+    include: {
+      users: true,
+      messages: {
+        include: {
+          sender: true,
+          seen: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
       },
-      include: {
-        users: true,
-      },
-    });
+    },
+  });
 
-    return conversation;
-  } catch (error: unknown) {
-    return null;
-  }
-};
-
-export default getConversationById;
+  return conversation;
+}

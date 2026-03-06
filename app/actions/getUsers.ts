@@ -1,9 +1,12 @@
 import prisma from "@/app/libs/prismadb";
-import getSession from "./getSession";
+import { getSession } from "./getSession";
+import { cacheTag } from "next/cache";
 
-const getUsers = async () => {
+export async function getUsers() {
+  "use cache";
+  cacheTag("users");
+
   const session = await getSession();
-
   if (!session?.user?.email) {
     return [];
   }
@@ -24,6 +27,4 @@ const getUsers = async () => {
   } catch (error: any) {
     return [];
   }
-};
-
-export default getUsers;
+}

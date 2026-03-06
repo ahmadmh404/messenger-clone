@@ -9,7 +9,7 @@ import { Modal } from "../Modal";
 import { Input } from "../Inputs/Input";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
-import Button from "../Button";
+import { Button } from "../Button";
 
 interface SettingsModalProps {
   isOpen?: boolean;

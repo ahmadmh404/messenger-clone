@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    swcPlugins: [["next-superjson-plugin", {}]],
-  },
+  cacheComponents: true,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },

@@ -5,7 +5,7 @@ import clsx from "clsx";
 import useConversation from "../hooks/useConversation";
 import { EmptyState } from "../components/EmptyState";
 
-const Home = () => {
+export default function Home() {
   const { isOpen } = useConversation();
 
   return (
@@ -15,6 +15,4 @@ const Home = () => {
       <EmptyState />
     </div>
   );
-};
-
-export default Home;
+}

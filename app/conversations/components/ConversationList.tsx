@@ -7,7 +7,7 @@ import { MdOutlineGroupAdd } from "react-icons/md";
 import clsx from "clsx";
 
 import useConversation from "@/app/hooks/useConversation";
-import { FullConversationType } from "@/app/types";
+import { FullConversationType } from "@/app/lib/types";
 import ConversationBox from "./ConversationBox";
 import GroupChatModal from "./GroupChatModal";
 import { User } from "@prisma/client";

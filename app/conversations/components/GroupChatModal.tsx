@@ -1,5 +1,6 @@
 "use client";
-import Button from "@/app/components/Button";
+
+import { Button } from "@/app/components/Button";
 import { Input } from "@/app/components/Inputs/Input";
 import { Select } from "@/app/components/Inputs/Select";
 import { Modal } from "@/app/components/Modal";

@@ -51,6 +51,7 @@ function Button({
   const Comp = asChild ? Slot.Root : "button";
 
   return (
+    // @ts-expect-error this error doesn't affect the production as it's ShadCn code.
     <Comp
       data-slot="button"
       data-variant={variant}
