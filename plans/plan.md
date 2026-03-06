@@ -41,9 +41,11 @@ This document outlines the comprehensive migration plan for upgrading the Messen
 
 ### Phase 3: Next.js 16 'use cache' Implementation
 
-- [ ] Add 'use cache' to server actions
-- [ ] Implement cache tags and revalidation
-- [ ] Update data fetching patterns
+- [ ] Add 'use cache' + cacheTag to server actions
+- [ ] Implement dynamic cache tags using template literals
+- [ ] Add revalidateTag() calls in mutation actions
+- [ ] Keep real-time data (messages) as dynamic
+- [ ] Test on-demand cache invalidation
 
 ### Phase 4: Authentication and API Updates
 
