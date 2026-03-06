@@ -1,6 +1,5 @@
 import prisma from "@/app/libs/prismadb";
-import { getSession } from "./getSession";
-import { cacheTag } from "next/cache";
+import { getSession } from "../actions/getSession";
 
 export async function getCurrentUser() {
   const session = await getSession();

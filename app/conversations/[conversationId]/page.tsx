@@ -4,7 +4,7 @@ import { EmptyState } from "@/app/components/EmptyState";
 import Header from "./components/Header";
 import Body from "./components/Body";
 import Form from "./components/Form";
-import { getCurrentUser } from "@/app/actions/getCurrentUser";
+import { getCurrentUser } from "@/app/lib/auth";
 
 interface IParams {
   conversationId: string;

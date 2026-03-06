@@ -1,8 +1,8 @@
 import React from "react";
 import ConversationList from "./components/ConversationList";
-import getConversations from "../actions/getConversations";
+import { getConversations } from "../actions/getConversations";
 import { getUsers } from "../actions/getUsers";
-import { getCurrentUser } from "../actions/getCurrentUser";
+import { getCurrentUser } from "../lib/auth";
 import { SidebarLayout } from "../components/sidebar/SidebarLayout";
 
 export default async function ConversationLayout({

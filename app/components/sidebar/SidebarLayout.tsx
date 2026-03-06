@@ -1,6 +1,6 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
-import { getCurrentUser } from "@/app/actions/getCurrentUser";
+import { getCurrentUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 
 interface SidebarLayoutProps {

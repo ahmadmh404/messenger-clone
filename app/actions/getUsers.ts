@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/app/libs/prismadb";
 import { getSession } from "./getSession";
 import { cacheTag } from "next/cache";
@@ -11,20 +13,16 @@ export async function getUsers() {
     return [];
   }
 
-  try {
-    const users = await prisma.user.findMany({
-      orderBy: {
-        createdAt: "desc",
+  const users = await prisma.user.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    where: {
+      NOT: {
+        email: session.user.email,
       },
-      where: {
-        NOT: {
-          email: session.user.email,
-        },
-      },
-    });
+    },
+  });
 
-    return users;
-  } catch (error: any) {
-    return [];
-  }
+  return users;
 }
