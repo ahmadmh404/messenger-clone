@@ -1,7 +1,7 @@
 import React from "react";
 import ConversationList from "./components/ConversationList";
-import { getConversations } from "../actions/getConversations";
-import { getUsers } from "../actions/getUsers";
+import { getConversations } from "../lib/queries/getConversations";
+import { getUsers } from "../lib/queries/getUsers";
 import { getCurrentUser } from "../lib/auth";
 import { SidebarLayout } from "../components/sidebar/SidebarLayout";
 

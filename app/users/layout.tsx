@@ -1,5 +1,5 @@
-import { getUsers } from "../actions/getUsers";
-import Sidebar from "../components/sidebar/Sidebar";
+import { SidebarLayout } from "../components/sidebar/SidebarLayout";
+import { getUsers } from "../lib/queries/getUsers";
 import UserList from "./components/UserList";
 
 export default async function UsersLayout({
@@ -10,11 +10,11 @@ export default async function UsersLayout({
   const users = await getUsers();
 
   return (
-    <Sidebar>
+    <SidebarLayout>
       <div className="h-full">
         <UserList items={users} />
         {children}
       </div>
-    </Sidebar>
+    </SidebarLayout>
   );
 }

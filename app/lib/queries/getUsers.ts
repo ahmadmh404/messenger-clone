@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/app/libs/prismadb";
-import { getSession } from "./getSession";
+import { getSession } from "@/app/lib/auth";
 import { cacheTag } from "next/cache";
 
 export async function getUsers() {

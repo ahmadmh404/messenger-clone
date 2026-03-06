@@ -1,5 +1,5 @@
-import { getConversationById } from "@/app/actions/getConversationById";
-import { getMessages } from "@/app/actions/getMessages";
+import { getConversationById } from "@/app/lib/queries/getConversationById";
+import { getMessages } from "@/app/lib/queries/getMessages";
 import { EmptyState } from "@/app/components/EmptyState";
 import Header from "./components/Header";
 import Body from "./components/Body";

@@ -435,7 +435,7 @@ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
 ### Data Fetching Pattern
 
 ```typescript
-// app/actions/getConversations.ts
+// app/lib/queries/getConversations.ts
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "./getCurrentUser";
 

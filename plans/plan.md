@@ -22,7 +22,7 @@ This document outlines the comprehensive migration plan for upgrading the Messen
 | ------------- | --------------------------------------------------------------------------------------------- |
 | Auth          | `app/libs/authOptions.ts`, `app/api/auth/[...nextauth]/route.ts`                              |
 | Components    | `app/components/ui/button.tsx`, `app/components/ui/dialog.tsx`, `app/components/ui/input.tsx` |
-| Data Fetching | `app/lib/auth.ts`, `app/actions/getUsers.ts`, `app/actions/getConversations.ts`               |
+| Data Fetching | `app/lib/auth.ts`, `app/lib/queries/getUsers.ts`, `app/lib/queries/getConversations.ts`       |
 | Pages         | `app/(site)/page.tsx`, `app/conversations/page.tsx`, `app/users/page.tsx`                     |
 
 ## Migration Phases
