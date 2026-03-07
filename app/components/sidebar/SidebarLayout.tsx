@@ -1,24 +1,14 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "./AppSidebar";
-import { getCurrentUser } from "@/app/actions/getCurrentUser";
-import { redirect } from "next/navigation";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { MainNavigationRail } from "./MainNavigationRail";
 
-interface SidebarLayoutProps {
-  children: React.ReactNode;
-}
-
-export async function SidebarLayout({ children }: SidebarLayoutProps) {
-  const currentUser = await getCurrentUser();
-  if (currentUser == null) redirect("/");
-
+export function SidebarLayout({ children, currentUser }: any) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full">
-        {/* The Sidebar component we refactored */}
-        <AppSidebar currentUser={currentUser} />
+      <div className="flex h-screen w-full bg-background">
+        <MainNavigationRail currentUser={currentUser} />
 
-        <SidebarInset className="flex flex-col">
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <SidebarInset className="flex flex-row overflow-hidden">
+          {children}
         </SidebarInset>
       </div>
     </SidebarProvider>

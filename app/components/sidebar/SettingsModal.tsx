@@ -30,8 +30,8 @@ function SettingsModal({ isOpen, onClose, currentUser }: SettingsModalProps) {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: currentUser.name,
-      image: currentUser.image,
+      name: currentUser?.name,
+      image: currentUser?.image,
     },
   });
 
@@ -83,7 +83,7 @@ function SettingsModal({ isOpen, onClose, currentUser }: SettingsModalProps) {
             <div className="mt-2 flex gap-x-3 items-center">
               <Image
                 className="rounded-full w-[48px] h-[48px] object-cover"
-                src={image || currentUser.image || "/images/placeholder.jpg"}
+                src={image || currentUser?.image || "/images/placeholder.jpg"}
                 width="48"
                 height="48"
                 alt="Avatar"

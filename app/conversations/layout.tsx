@@ -1,8 +1,8 @@
 import React from "react";
 import ConversationList from "./components/ConversationList";
-import getConversations from "../actions/getConversations";
-import { getUsers } from "../actions/getUsers";
-import { getCurrentUser } from "../actions/getCurrentUser";
+import { getConversations } from "../lib/queries/getConversations";
+import { getUsers } from "../lib/queries/getUsers";
+import { getCurrentUser } from "../lib/auth";
 import { SidebarLayout } from "../components/sidebar/SidebarLayout";
 
 export default async function ConversationLayout({
@@ -11,11 +11,11 @@ export default async function ConversationLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
-  if (currentUser == null) return null;
+  if (currentUser == null || currentUser.email == null) return null;
 
   const conversations = await getConversations(currentUser.id);
 
-  const users = await getUsers();
+  const users = await getUsers(currentUser.email);
 
   return (
     <SidebarLayout>

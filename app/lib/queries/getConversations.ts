@@ -1,8 +1,10 @@
+"use server";
+
 import prisma from "@/app/libs/prismadb";
 
 import { cacheTag } from "next/cache";
 
-const getConversations = async (userId: string) => {
+export async function getConversations(userId: string) {
   "use cache";
   cacheTag(`conversations-${userId}`);
 
@@ -31,6 +33,4 @@ const getConversations = async (userId: string) => {
   } catch (error: unknown) {
     return [];
   }
-};
-
-export default getConversations;
+}

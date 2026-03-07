@@ -94,7 +94,7 @@ revalidateTag(`conversations-${userId}`);
 1. **After Creating/Updating Data**
 
 ```typescript
-// app/actions/createMessage.ts
+// app/lib/queries/createMessage.ts
 "use server";
 import { revalidateTag } from "next/cache";
 import prisma from "@/app/libs/prismadb";
@@ -128,7 +128,7 @@ export async function createMessage(
 // app/api/conversations/[conversationId]/seen/route.ts
 import { revalidateTag } from "next/cache";
 import prisma from "@/app/libs/prismadb";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/app/lib/auth";
 
 export async function POST(
   request: Request,

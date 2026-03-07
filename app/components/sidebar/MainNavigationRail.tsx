@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { User } from "@prisma/client";
 import useRoutes from "../../hooks/useRoute";
-
+import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
@@ -16,13 +16,12 @@ import {
 } from "@/components/ui/sidebar";
 import Avatar from "../Avatar";
 import SettingsModal from "./SettingsModal";
-import Link from "next/link";
 
-interface AppSidebarProps {
+interface MainNavigationRailProps {
   currentUser: User;
 }
 
-export function AppSidebar({ currentUser }: AppSidebarProps) {
+export function MainNavigationRail({ currentUser }: MainNavigationRailProps) {
   const routes = useRoutes();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +33,10 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         onClose={() => setIsOpen(false)}
       />
 
-      <Sidebar collapsible="icon" className="border-r">
+      <Sidebar
+        collapsible="icon"
+        className="border-r bg-zinc-950" // Dark background for the primary rail
+      >
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
@@ -45,7 +47,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
                       asChild
                       isActive={item.active}
                       tooltip={item.label}
-                      onClick={item.onClick}
+                      className="hover:bg-zinc-800 transition-colors"
                     >
                       <Link
                         href={item.href}
@@ -68,15 +70,12 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
               <SidebarMenuButton
                 size="lg"
                 onClick={() => setIsOpen(true)}
-                className="hover:bg-sidebar-accent"
+                className="hover:bg-zinc-800"
               >
                 <Avatar user={currentUser} />
-                <div className="flex flex-col gap-0.5 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {currentUser.name}
-                  </span>
-                  <span className="truncate text-sm text-muted-foreground">
-                    {currentUser.email}
+                <div className="flex flex-col gap-0.5 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                  <span className="truncate font-semibold text-zinc-100">
+                    {currentUser?.name}
                   </span>
                 </div>
               </SidebarMenuButton>

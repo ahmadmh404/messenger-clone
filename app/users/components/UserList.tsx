@@ -1,7 +1,9 @@
 "use client";
 
 import { User } from "@prisma/client";
+import { SidebarMenuItem } from "@/components/ui/sidebar";
 import UserBox from "./UserBox";
+import { SidebarListContainer } from "@/app/components/sidebar/SidebarListContainer";
 
 interface UserListProps {
   items: User[];
@@ -9,15 +11,12 @@ interface UserListProps {
 
 export default function UserList({ items }: UserListProps) {
   return (
-    <aside className="fixed inset-y-0 pb-20 lg:pb-0 lg:left-20 lg:w-80 lg:block overflow-y-auto border-r border-gray-200 blocl w-full left-0">
-      <div className="px-5">
-        <div className="flex-col">
-          <div className="text-2xl font-bold text-neutral-300 py-4">People</div>
-        </div>
-        {items.map((item) => (
-          <UserBox key={item.id} data={item} />
-        ))}
-      </div>
-    </aside>
+    <SidebarListContainer title="People" placeholder="Search people...">
+      {items.map((item) => (
+        <SidebarMenuItem key={item.id} className="list-none">
+          <UserBox data={item} />
+        </SidebarMenuItem>
+      ))}
+    </SidebarListContainer>
   );
 }

@@ -1,6 +1,10 @@
 import prisma from "@/app/libs/prismadb";
-import { getSession } from "./getSession";
-import { cacheTag } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/libs/authOptions";
+
+export async function getSession() {
+  return await getServerSession(authOptions);
+}
 
 export async function getCurrentUser() {
   const session = await getSession();
