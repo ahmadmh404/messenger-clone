@@ -75,7 +75,7 @@ export function MainNavigationRail({ currentUser }: MainNavigationRailProps) {
                 <Avatar user={currentUser} />
                 <div className="flex flex-col gap-0.5 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                   <span className="truncate font-semibold text-zinc-100">
-                    {currentUser.name}
+                    {currentUser?.name}
                   </span>
                 </div>
               </SidebarMenuButton>
